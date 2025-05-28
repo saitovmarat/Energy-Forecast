@@ -1,4 +1,8 @@
 dataset/*
 !dataset/dataPreprocessing.ipynb
+
 venv
+_*
+
+models
 *.keras
