@@ -4,5 +4,4 @@ dataset/*
 venv
 _*
 
-models
 *.keras
