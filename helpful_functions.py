@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
 
 def train_val_test_split(data, val_ratio, test_ratio):
     n = len(data)
@@ -15,6 +17,23 @@ def train_val_test_split(data, val_ratio, test_ratio):
     
     return train, val, test
 
+
+def train_val_test_split_in_middle(data, val_ratio, test_ratio):
+    n = len(data)
+    test_size = int(n * test_ratio)
+    val_size = int(n * val_ratio)
+
+    test_start = n // 2
+    test_end = test_start + test_size
+
+    val_start = test_start - val_size
+    val_end = test_start
+
+    train = pd.concat([data[:val_start], data[test_end:]])
+    val = data[val_start:val_end]
+    test = data[test_start:test_end]
+
+    return train, val, test
 
 def create_sequences(data, target_idx, window_size):
     X, y = [], []
@@ -50,7 +69,7 @@ def train_and_evaluate_model(model, model_type, X_train, y_train, X_val, y_val, 
     mse_val = mean_squared_error(y_true_val_dn, y_pred_val_dn)
     mse_test = mean_squared_error(y_true_test_dn, y_pred_test_dn)
 
-    print(f"{model_type} | val_loss: {history.history['val_loss'][-1]:.4f} | MSE: {mse_val:.4f}")
+    print(f"{model_type} | val_loss: {history.history['val_loss'][-1]:.4f} | MSE_val: {mse_val:.4f}")
 
     return {
         'model_type': model_type,
